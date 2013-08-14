@@ -9,12 +9,12 @@ Spree::CheckoutController.class_eval do
         render :edit and return unless apply_gift_code
       end
       return if after_update_attributes
-
+  
       unless @order.next
         flash[:error] = Spree.t(:payment_processing_failed)
         redirect_to checkout_state_path(@order.state) and return
       end
-
+  
       if @order.completed?
         session[:order_id] = nil
         flash.notice = Spree.t(:order_processed_successfully)
@@ -27,5 +27,18 @@ Spree::CheckoutController.class_eval do
       render :edit
     end
   end
+  
+  private
+    def after_update_attributes
+      if object_params && object_params[:coupon_code].present?
+        coupon_result = Spree::Promo::CouponApplicator.new(@order).apply
+        if !coupon_result[:coupon_applied?]
+          @coupon_message = coupon_result[:error]
+          respond_with(@order, :default_template => 'spree/api/orders/could_not_apply_coupon')
+          return true
+        end
+      end
+      false
+    end
 
 end

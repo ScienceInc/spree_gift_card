@@ -5,7 +5,6 @@ Spree::Order.class_eval do
 
   # If variant is a gift card we say order doesn't already contain it so that each gift card is it's own line item.
   def find_line_item_by_variant(variant)
-    return false if variant.product.is_gift_card?
     line_items.detect { |line_item| line_item.variant_id == variant.id }
   end
 
