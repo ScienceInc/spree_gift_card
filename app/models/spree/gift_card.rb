@@ -64,6 +64,14 @@ module Spree
         self.code = Digest::SHA1.hexdigest([Time.now, rand].join)
       end
     end
+    
+    # switch to this method in the before validation if you want to use a 16 digit card code instead of SHA
+    def generate_short_code
+      until self.code.present? && self.class.where(code: self.code).count == 0
+        self.code = ""
+        16.times { self.code += Random.rand(0..9).to_s }
+      end
+    end
 
     def set_calculator
       self.calculator = Spree::Calculator::GiftCard.new
