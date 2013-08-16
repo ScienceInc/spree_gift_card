@@ -14,7 +14,7 @@ module Spree
 
     validates :code,               presence: true, uniqueness: true
     validates :current_value,      presence: true
-    validates :email, email: true, presence: true
+    validates :email, email: true
     validates :name,               presence: true
     validates :original_value,     presence: true
 
