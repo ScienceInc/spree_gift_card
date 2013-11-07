@@ -4,13 +4,17 @@ module Spree
       before_filter :find_gift_card_variants, :except => [:destroy]
 
       def create
-        @object.attributes = params[object_name]
-        if @object.save
-          flash[:success] = Spree.t(:successfully_created_gift_card)
-          redirect_to admin_gift_cards_path
-        else
-          render :new
+        count = params[:gift_card][:count].to_i
+        params[:gift_card].delete(:count)
+        count.times do |i|
+          card = Spree::GiftCard.new(params[:gift_card])
+          if card.save
+            flash[:success] = count == 1 ? Spree.t(:successfully_created_gift_card) : Spree.t("Successfully created #{i} gift cards.")
+          else
+            render :new
+          end
         end
+        redirect_to admin_gift_cards_path
       end
 
       private

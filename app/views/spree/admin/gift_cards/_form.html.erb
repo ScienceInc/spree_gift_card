@@ -1,16 +1,23 @@
 <div data-hook="admin_gift_card_form_fields" class="row clearfix">
   <div class="alpha five columns">
     <%= f.field_container :email do %>
-      <%= f.label :email %> <span class="required">*</span><br/>
+      <%= f.label :email %><br/>
       <%= f.text_field :email, :class => "fullwidth" %>
       <%= f.error_message_on :email %>
     <% end %>
   </div>
-  <div class="omega five columns">
+  <div class="five columns">
     <%= f.field_container :name do %>
       <%= f.label :name %> <span class="required">*</span><br/>
       <%= f.text_field :name, :class => "fullwidth" %>
       <%= f.error_message_on :name %>
+    <% end %>
+  </div>
+  <div class="omega five columns">
+    <%= f.field_container :amount do %>
+      <%= f.label :count %> <span class="required">*</span><br/>
+      <%= f.text_field :count, :class => "fullwidth", value: 1 %>
+      <%= f.error_message_on :count %>
     <% end %>
   </div>
 
