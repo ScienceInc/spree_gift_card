@@ -14,10 +14,12 @@
     <% end %>
   </div>
   <div class="omega five columns">
-    <%= f.field_container :amount do %>
-      <%= f.label :count %> <span class="required">*</span><br/>
-      <%= f.text_field :count, :class => "fullwidth", value: 1 %>
-      <%= f.error_message_on :count %>
+    <% unless params[:action] == "edit" %>
+      <%= f.field_container :count do %>
+        <%= f.label :count %> <span class="required">*</span><br/>
+        <%= f.text_field :count, :class => "fullwidth", value: 1 %>
+        <%= f.error_message_on :count %>
+      <% end %>
     <% end %>
   </div>
 
