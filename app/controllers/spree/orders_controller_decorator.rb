@@ -5,7 +5,12 @@ Spree::OrdersController.class_eval do
     def apply_gift_card
       @order = current_order
       if @order.update_attributes(params[:order])
-        render :edit and return unless apply_gift_code
+      	unless apply_gift_code
+      		@order.state = "address"
+      		@order.bill_address ||= Spree::Address.default
+        	@order.ship_address ||= Spree::Address.default
+        	render :edit and return
+        end
       end
     end
 
