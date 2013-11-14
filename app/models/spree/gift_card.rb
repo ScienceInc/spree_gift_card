@@ -24,11 +24,11 @@ module Spree
 
     include Spree::Core::CalculatedAdjustments
 
-    def apply(order)
+    def apply(order, label=false)
       # Nothing to do if the gift card is already associated with the order
       return if order.gift_credit_exists?(self)
       order.update!
-      create_adjustment(Spree.t(:gift_card), order, order, true)
+      create_adjustment((label ? label : Spree.t(:gift_card)), order, order, true)
       order.update!
     end
 
