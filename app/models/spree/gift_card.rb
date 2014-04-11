@@ -62,7 +62,8 @@ module Spree
     def generate_code
       until self.code.present? && self.class.where(code: self.code).count == 0
         self.code = ""
-        16.times { self.code += Random.rand(0..9).to_s }
+        self.code += Random.rand(1..9).to_s
+        15.times { self.code += Random.rand(0..9).to_s }
       end
     end
 
