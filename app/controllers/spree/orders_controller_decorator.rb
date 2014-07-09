@@ -3,7 +3,7 @@ Spree::OrdersController.class_eval do
   
   private
     def apply_gift_card
-      @order = current_order
+      return unless @order = current_order
       if @order.update_attributes(params[:order])
       	unless apply_gift_code
       		@order.state = "address"
