@@ -5,7 +5,7 @@ module Spree
 
     UNACTIVATABLE_ORDER_STATES = ["complete", "awaiting_return", "returned"]
 
-    attr_accessible :email, :name, :note, :variant_id
+    attr_accessible :email, :name, :note, :variant_id, :liability, :expires_at
 
     belongs_to :variant
     belongs_to :line_item
