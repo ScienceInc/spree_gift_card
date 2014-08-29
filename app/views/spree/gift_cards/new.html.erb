@@ -1,25 +1,149 @@
-<div id="gift_cards">
-  <h1><%= Spree.t(:gift_card) %></h1>
-  <%= render "spree/shared/error_messages", :target => @gift_card %>
-  <%= form_for @gift_card do |f| %>
-    <div class="input-dropdown-wrap slim-aligned">
-      <%= f.label :variant_id, Spree.t(:value) %>
-      <span class="required">*</span><br/>
-      <%= f.select :variant_id, @gift_card_variants.map { |variant| [variant.display_price, variant.id] } %>
+<div id="gift-cards">
+  <section id="looks">
+    <div class="box">
+      <h3>What should your eGift Card look like?</h3>
+      <h4>Personalize your card to make your recipient feel special!</h4>
+      <div id="img-list">
+        <img src="https://s3.amazonaws.com/prizecandle_production_assets/assets/august2014/card-01.png" alt="" class="selected">
+        <img src="https://s3.amazonaws.com/prizecandle_production_assets/assets/august2014/card-02.png" alt="">
+        <img src="https://s3.amazonaws.com/prizecandle_production_assets/assets/august2014/card-03.png" alt="">
+        <img src="https://s3.amazonaws.com/prizecandle_production_assets/assets/august2014/card-04.png" alt="">
+        <img src="https://s3.amazonaws.com/prizecandle_production_assets/assets/august2014/card-05.png" alt="">
+        <img src="https://s3.amazonaws.com/prizecandle_production_assets/assets/august2014/card-06.png" alt="">
+      </div>  
+      <img src="https://s3.amazonaws.com/prizecandle_production_assets/assets/august2014/card-01.png" alt="" id="featured">
+      <textarea name="" id="" placeholder="Add your email message..." cols="30" rows="10"></textarea>
     </div>
-    <div class="input-text-wrap slim-aligned">
-      <%= f.label :name, Spree.t("recipient_name") %>
-      <span class="required">*</span><br/>
-      <%= f.text_field :name %>
+  </section>
+  <section id="how-much">
+    <div class="box">
+      <h3>How much would you like to gift?</h3>
+      <h4>Choose an amount between $25 - $250 USD. You can add multiple personalized cards to your cart.</h4>
+      <div id="left">
+        <h5>Select an amount:</h3>
+        <ul id="price-list">
+          <li id="25" class="selected">$25</li>
+          <li id="50">$50</li>
+          <li id="100">$100</li>
+          <li id="150">$150</li>
+          <li id="250">$250</li>
+        </ul>
+        <form action="" id="ammount-form">
+          <input type="radio" id="25" name="giftcard-value" value="25"><p>$25</p><br>
+          <input type="radio" id="50" name="giftcard-value" value="50"><p>$50</p><br>
+          <input type="radio" id="100" name="giftcard-value" value="100"><p>$100</p><br>
+          <input type="radio" id="150" name="giftcard-value" value="150"><p>$150</p><br>
+          <input type="radio" id="250" name="giftcard-value" value="250"><p>$250</p>
+        </form>
+      </div>
+      <div id="right">
+        <h5>Or give a Gift Subscription instead:</h5>
+        <form action="" id="subscription-form">
+          <input type="radio" name="subscription" value="1 month subscription ($24.95)"><p>1 month subscription ($24.95)</p><br>
+          <input type="radio" name="subscription" value="3 month subscription ($74.95)"><p>3 month subscription ($74.95)</p><br>
+          <input type="radio" name="subscription" value="6 month subscription ($149.70)"><p>6 month subscription ($149.70)</p>
+        </form>
+      </div>
     </div>
-    <div class="input-text-wrap slim-aligned">
-      <%= f.label :email, Spree.t("recipient_email") %>
-      <%= f.text_field :email %>
+  </section>
+  <section id="delivery">
+    <div class="box">
+      <h3>Where would you like to deliver  your eGift Card?</h3>
+      <h4>Send the eGift Card directly to your friend's email inbox. It will typically be delivered within minutes. <br> You'll be notified as soon as your friend views their gift.</h4>
+      <div class="item">
+        <h3>From</h3>
+        <label for="g-name">Purchaser Name*</label>
+        <input type="text" id="g-name">
+        <h3>Deliver on</h3>
+        <label for="datepicker">Send the eGift card right away or up to 12 months in the future</label>
+        <input type="text" id="datepicker"><img src="https://s3.amazonaws.com/prizecandle_production_assets/assets/august2014/calendar.png" alt="" id="calendar-icon">
+      </div>
+      <div class="item">
+        <h3>To</h3>
+        <label for="r_name">Recipient Name*</label>
+        <input type="text" id="r_name">
+        <label for="r_email">Recipient Email*</label>
+        <input type="text" id="r_email">
+      </div>
     </div>
-    <div class="input-text-wrap slim-aligned">
-      <%= f.label :note, Spree.t("note") %><br/>
-      <%= f.text_area :note, :rows => 10 %>
+  </section>
+  <section id="last">
+    <div class="box">
+      <input id="l" class="cta-submit disabled" type="submit" value="Add another giftcard"></input>
+      <input id="r" class="cta-submit disabled" type="submit" value="Add to Cart"></input>
     </div>
-    <%= f.submit Spree.t(:add_to_cart), :class => 'medium bg-disabled cta', :id=>"cta-submit"  %>
-  <% end %>
+  </section>
 </div>
+<!-- js -->
+<script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+  //fire date picker jquery.ui
+  $( "#datepicker" ).datepicker();
+  console.log('script-datepicker');
+
+  //img select function
+  $('#img-list > img').on("click", function(){
+    $(this).addClass('selected').siblings().removeClass('selected');
+    var current = $('#img-list > img.selected').attr('src');
+    //console.log(current);
+    $('img#featured').attr('src', current);
+  });
+
+  //how much function
+  $('#price-list > li').on("click", function(){
+    $(this).addClass('selected').siblings().removeClass('selected');
+    var current = $('#price-list > li.selected').attr('id');
+    var checked = $('#left input:radio#' + current).attr('value');
+    $('#left input:radio#' + current).prop('checked', 'checked');
+  });
+
+  //disable untill the forms are filled out.
+  function checkInput (){
+    $("input[type='text']").each(function( index, value ){ //select every input:text
+      var length = $(this).val().length; //store the length of the values of all text inputs
+      console.log(length);
+      if(length > 0 ) { //if the $length is not zero (aka filled) then run this code
+        console.log('hey! this form is filled!');
+        $(value).removeClass('incomplete');
+      }
+      else { //if one of the $length are equal to 0 run this!
+        console.log('FILL OUT THE FORM!');
+        $(value).addClass('incomplete');
+      }
+    });
+  };
+
+  function checkEmail(email) {
+    var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
+    return pattern.test(email);
+  };
+
+  if(checkEmail() == false){
+    console.log('get a real email');
+  } else {
+    console.log('herpaderp');
+  }
+
+  console.log('script-check-01')
+
+
+  $("input[type='text']").change(function(){
+    checkInput();
+    if($('.incomplete').length === 0 && checkEmail($('#r_email').val()) == true){
+      $("input[type='submit']").removeClass('disabled').addClass('enabled');
+      console.log('its done!');
+    }
+    else {
+      $("input[type='submit']").removeClass('enabled').addClass('disabled');
+    }
+  });
+
+
+
+  //check if the form is the right 
+
+
+});
+</script> 
