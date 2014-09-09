@@ -54,9 +54,9 @@ module Spree
 
     def order_activatable?(order)
       order &&
-      created_at < order.created_at &&
       current_value > 0 &&
-      !UNACTIVATABLE_ORDER_STATES.include?(order.state)
+      !UNACTIVATABLE_ORDER_STATES.include?(order.state) &&
+      (line_item.nil? || (line_item.order.complete? && !line_item.order.canceled?))
     end
 
     public
@@ -72,9 +72,8 @@ module Spree
 
     def generate_code
       until self.code.present? && self.class.where(code: self.code).count == 0
-        self.code = ""
-        self.code += Random.rand(1..9).to_s
-        15.times { self.code += Random.rand(0..9).to_s }
+        self.code = GiftCardConfig::CARD_PREFIX
+        (16 - GiftCardConfig::CARD_PREFIX.length).times { self.code += Random.rand(0..9).to_s }
       end
     end
 
