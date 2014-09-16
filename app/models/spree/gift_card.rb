@@ -3,9 +3,11 @@ require 'spree/core/validators/email'
 module Spree
   class GiftCard < ActiveRecord::Base
 
+    scope :unexpired_gift_codes, -> { where("expires_at > ?", DateTime.now - 1.days) }
+
     UNACTIVATABLE_ORDER_STATES = ["complete", "awaiting_return", "returned"]
 
-    attr_accessible :email, :name, :note, :variant_id
+    attr_accessible :email, :name, :note, :variant_id, :liability, :expires_at
 
     belongs_to :variant
     belongs_to :line_item
@@ -52,17 +54,26 @@ module Spree
 
     def order_activatable?(order)
       order &&
-      created_at < order.created_at &&
       current_value > 0 &&
-      !UNACTIVATABLE_ORDER_STATES.include?(order.state)
+      !UNACTIVATABLE_ORDER_STATES.include?(order.state) &&
+      (line_item.nil? || (line_item.order.complete? && !line_item.order.canceled?))
+    end
+
+    public
+    def self.total_liability
+      sum(:liability)
+    end
+
+    def self.libalities
+      pluck(:liability)
     end
 
     private
 
     def generate_code
       until self.code.present? && self.class.where(code: self.code).count == 0
-        self.code = ""
-        16.times { self.code += Random.rand(0..9).to_s }
+        self.code = GiftCardConfig::CARD_PREFIX
+        (16 - GiftCardConfig::CARD_PREFIX.length).times { self.code += Random.rand(0..9).to_s }
       end
     end
 

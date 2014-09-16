@@ -39,4 +39,22 @@
       <%= f.select :variant_id, @gift_card_variants.map { |v| [number_to_currency(v.price), v.id] }, {}, disabled: (f.object.present? && !f.object.new_record?), :class => 'select2' %>
     <% end %>
   </div>
+
+  <div class="clear"></div>
+
+  <div class="alpha five columns">
+    <%= f.field_container :liability do %>
+      <%= f.label :liability %>
+      <%= f.text_field :liability %>
+      <%= f.error_message_on :liability %>
+    <% end %>
+  </div>
+
+  <div class="five columns">
+    <%= f.field_container :expires_at do %>
+      <%= f.label :expires_at %>
+      <%= f.text_field :expires_at, :value => datepicker_field_value(@gift_card.expires_at), :class => 'datepicker' %>
+      <%= f.error_message_on :expires_at  %>
+    <% end %>
+  </div>
 </div>
