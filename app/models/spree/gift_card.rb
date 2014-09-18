@@ -7,10 +7,11 @@ module Spree
 
     UNACTIVATABLE_ORDER_STATES = ["complete", "awaiting_return", "returned"]
 
-    attr_accessible :email, :name, :note, :variant_id, :liability, :expires_at
+    attr_accessible :email, :name, :note, :variant_id, :liability, :expires_at, :sender_name, :send_date, :image_id
 
     belongs_to :variant
     belongs_to :line_item
+    belongs_to :image, class_name: 'Spree::GiftCardImage'
 
     has_many :transactions, class_name: 'Spree::GiftCardTransaction'
 
@@ -23,6 +24,8 @@ module Spree
     before_validation :generate_code, on: :create
     before_validation :set_calculator, on: :create
     before_validation :set_values, on: :create
+
+    delegate :image_url, to: :image
 
     include Spree::Core::CalculatedAdjustments
 
