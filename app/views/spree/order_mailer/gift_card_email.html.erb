@@ -1,3 +1,9 @@
 <p>Hi <%= @gift_card.name %>,</p>
-<p><%= @gift_card.note %></p>
-<p>To use your <%= number_to_currency @gift_card.price %> Gift Card enter the following Gift Code during checkout: <%= @gift_card.code %></p>
+
+<% if @gift_card.note %>
+	<p><%= @gift_card.note %></p>
+<% else %>
+	<p><%= @gift_card.sender_name %> sent you a gift card for <%= Spree::Config[:site_name] %>.</p>
+<% end %>
+
+<p>To use your <%= number_to_currency @gift_card.price %> Gift Card enter Gift Code <b><%= @gift_card.code %></b> during checkout a <a href="<%= root_url %>"><%= Spree::Config[:site_name] %></a></p>

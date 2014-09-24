@@ -9,6 +9,7 @@ module Spree
 
   	def create
   		@gift_card = GiftCard.new(params[:gift_card])
+      @gift_card.expires_at = nil
       if @gift_card.save
       	# Create line item
         line_item = LineItem.new(quantity: 1)
@@ -18,12 +19,12 @@ module Spree
         # Add to order
         order = current_order(true)
         order.line_items << line_item
-        line_item.order=order
+        line_item.order = order
         order.save!
         # Save gift card
         @gift_card.line_item = line_item
         @gift_card.save!
-        redirect_to params[:buy_another] == "true" ? new_gifts_path : checkout_path
+        redirect_to params[:buy_another] == "true" ? new_gifts_path : cart_path
       else
       	render :new
       end

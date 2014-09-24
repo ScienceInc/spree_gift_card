@@ -91,8 +91,6 @@ $(document).ready(function(){
   //fire date picker jquery.ui
   $( "#datepicker" ).datepicker({minDate: 0, maxDate: "1Y"});
 
-  $('#img-list > img:first').click();
-
   //img select function
   $('#img-list > img').on("click", function(){
     $(this).addClass('selected').siblings().removeClass('selected');
@@ -153,5 +151,7 @@ $(document).ready(function(){
       $("input[type='submit']").removeClass('enabled').addClass('disabled');
     }
   });
+
+  $('#img-list > img:first').click();
 });
 </script> 
