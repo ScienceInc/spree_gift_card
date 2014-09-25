@@ -32,18 +32,13 @@
           <% end %>
         </div>
       </div>
-      <% if false #dont render this until the monthly option is ready %>
+      <% unless @gift_subscriptions.blank? #dont render this until the monthly option is ready %>
       <div id="right">
         <h5>Or give a Gift Subscription instead:</h5>
-        <form action="" id="subscription-form">
-          <%# TODO: add actual sub values %>
-          <%= f.radio_button(:value, "1", checked: false) %>
-          <p>1 month subscription ($24.95)</p><br>
-          <%= f.radio_button(:value, "3", checked: false) %>
-          <p>3 month subscription ($74.95)</p><br>
-          <%= f.radio_button(:value, "6", checked: false) %>
-          <p>6 month subscription ($149.70)</p>
-        </form>
+          <% @gift_subscriptions.each do |sub| %>
+            <%= f.radio_button(:variant_id, sub.id, checked: false) %>
+            <p><%= sub.option_values.first.presentation %> subscription (<%= sub.price %>)</p><br>
+          <% end %>
       </div>
       <% end %>
     </div>
