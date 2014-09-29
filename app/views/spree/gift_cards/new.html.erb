@@ -21,7 +21,6 @@
       <div id="left">
         <h5>Select an amount:</h3>
         <ul id="price-list">
-          <%# TODO: add other amounts %>
           <% @gift_card_variants.each_with_index do |gcv, i| %>
             <li data-value="<%= gcv.id %>" class="<%= 'selected' if i == 0 %>">$<%= gcv.price.to_i %></li>
           <% end %>
@@ -55,11 +54,11 @@
       <div class="item">
         <h3>From</h3>
         <label for="g-name">Purchaser Name*</label>
-        <%= f.text_field :sender_name, id: "g-name" %>
+        <%= f.text_field :sender_name, id: "g-name", class: "validate-check" %>
         <% if false #disable date picker for now %>
         <h3>Deliver on</h3>
         <label for="datepicker">Send the eGift card right away or up to 12 months in the future</label>
-        <%= f.text_field :send_date, id: "datepicker" %>
+        <%= f.text_field :send_date, id: "datepicker", class: "validate-check" %>
         <img src="https://s3.amazonaws.com/prizecandle_production_assets/assets/august2014/calendar.png" alt="" id="calendar-icon">
         <% else %>
         <%= f.hidden_field :send_date, value: Date.today %>
@@ -68,17 +67,17 @@
       <div class="item">
         <h3>To</h3>
         <label for="r_name">Recipient Name*</label>
-        <%= f.text_field :name, id: "r_name" %>
+        <%= f.text_field :name, id: "r_name", class: "validate-check" %>
         <label for="r_email">Recipient Email*</label>
-        <%= f.text_field :email, id: "r_email" %>
+        <%= f.text_field :email, id: "r_email", class: "validate-check validate-email" %>
       </div>
     </div>
   </section>
   <section id="last">
     <div class="box">
       <%= hidden_field_tag :buy_another, "false" %>
-      <input id="l" class="cta-submit disabled" type="submit" value="Add another giftcard" data-buy-another="true"></input>
-      <input id="r" class="cta-submit disabled" type="submit" value="Add to Cart" data-buy-another="false"></input>
+      <input id="l" class="cta-submit validate-submit disabled" type="submit" value="Add another giftcard" data-buy-another="true"></input>
+      <input id="r" class="cta-submit validate-submit disabled" type="submit" value="Add to Cart" data-buy-another="false"></input>
     </div>
   </section>
 </div>
@@ -107,48 +106,13 @@ $(document).ready(function(){
   $('#price-list > li').on("click", function(){
     $(this).addClass('selected').siblings().removeClass('selected');
     var current = $('#price-list > li.selected').data('value');
-    // var checked = $('#left input:radio#' + current).attr('value');
-    console.log($('#left input:radio[value="' + current + '"]'))
     $('#left input:radio[value="' + current + '"]').prop('checked', 'checked');
-  });
-
-  $('#new_gift_card .cta-submit.disabled').on('click', function(e){
-    e.preventDefault();
   });
 
   $('#new_gift_card .cta-submit').on('click', function(e){
     $('#buy_another').attr("value", $(this).data("buy-another"));
     if ($(this).hasClass("enabled")){
       $('#new_gift_card').submit();
-    }
-  });
-
-  //disable untill the forms are filled out.
-  function checkInput (){
-    $("input[type='text']").each(function( index, value ){ //select every input:text
-      var length = $(this).val().length; //store the length of the values of all text inputs
-      if(length > 0 ) { //if the $length is not zero (aka filled) then run this code
-        $(value).removeClass('incomplete');
-      }
-      else { //if one of the $length are equal to 0 run this!
-        $(value).addClass('incomplete');
-      }
-    });
-  };
-
-  function checkEmail(email) {
-    var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
-    return pattern.test(email);
-  };
-
-
-  $("input[type='text']").change(function(){
-    checkInput();
-    if($('.incomplete').length === 0 && checkEmail($('#r_email').val()) == true){
-      $("input[type='submit']").removeClass('disabled').addClass('enabled');
-    }
-    else {
-      $("input[type='submit']").removeClass('enabled').addClass('disabled');
     }
   });
 
