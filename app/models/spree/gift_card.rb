@@ -26,6 +26,7 @@ module Spree
     before_validation :set_values, on: :create
 
     delegate :image_url, to: :image
+    delegate :thumbnail_url, to: :image
 
     include Spree::Core::CalculatedAdjustments
 

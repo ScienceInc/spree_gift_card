@@ -6,10 +6,10 @@
       <h4>Personalize your card to make your recipient feel special!</h4>
       <div id="img-list">
         <% @card_images.each do |image| %>
-        <img src="<%= image.image_url %>" alt="" data-id="<%= image.id %>">
+        <img src="<%= image.thumbnail_url %>" alt="" data-id="<%= image.id %>" data-large-url="<%= image.image_url %>">
         <% end %>
       </div>  
-      <img src="https://s3.amazonaws.com/prizecandle_production_assets/assets/august2014/card-01.png" alt="" id="featured">
+      <img src="<%= @card_images.first.image_url %>" alt="" id="featured">
       <%= f.hidden_field :image_id, value: "" %>
       <%= f.text_area :note, placeholder: "Add your email message...", cols: 30, rows: 10 %>
     </div>
@@ -44,7 +44,7 @@
   </section>
   <section id="delivery">
     <div class="box">
-      <h3>Where would you like to deliver  your eGift Card?</h3>
+      <h3>Where would you like to deliver your eGift Card?</h3>
       <h4>Send the eGift Card directly to your friend's email inbox. It will typically be delivered within minutes. <br> You'll be notified as soon as your friend views their gift.</h4>
       <div class="item">
         <h3>From</h3>
@@ -71,8 +71,8 @@
   <section id="last">
     <div class="box">
       <%= hidden_field_tag :buy_another, "false" %>
-      <input id="l" class="cta-submit validate-submit disabled" type="submit" value="Add another giftcard" data-buy-another="true"></input>
-      <input id="r" class="cta-submit validate-submit disabled" type="submit" value="Add to Cart" data-buy-another="false"></input>
+      <input id="l" class="cta-submit validate-submit" type="submit" value="Add another giftcard" data-buy-another="true"></input>
+      <input id="r" class="cta-submit validate-submit" type="submit" value="Add to Cart" data-buy-another="false"></input>
     </div>
   </section>
 </div>
@@ -88,7 +88,7 @@ $(document).ready(function(){
   //img select function
   $('#img-list > img').on("click", function(){
     $(this).addClass('selected').siblings().removeClass('selected');
-    var current = $('#img-list > img.selected').attr('src');
+    var current = $('#img-list > img.selected').data('large-url');
     $('img#featured').attr('src', current);
     $('#gift_card_image_id').attr("value", $(this).data("id"));
   });

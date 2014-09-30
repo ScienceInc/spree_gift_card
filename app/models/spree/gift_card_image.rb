@@ -4,5 +4,9 @@ module Spree
 
   	scope :ordered, where(active: true).order("spree_gift_card_images.order ASC NULLS LAST")
 
+  	def thumbnail_url
+  		image_url.gsub(/-full\./, "-thumb.")
+  	end
+
   end
 end
