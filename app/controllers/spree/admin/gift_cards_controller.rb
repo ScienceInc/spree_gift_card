@@ -17,6 +17,10 @@ module Spree
         redirect_to admin_gift_cards_path
       end
 
+      def search
+        @gift_card = Spree::GiftCard.find_by_code(params[:code])
+      end
+
       private
       def collection
         Spree::GiftCard.order("created_at desc").page(params[:page]).per(Spree::Config[:orders_per_page])

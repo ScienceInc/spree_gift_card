@@ -8,10 +8,22 @@
   </li>
 <% end %>
 
+<%= form_tag(admin_gift_card_search_path, method: :get) do %>
+  <div class="alpha nine columns">
+    <div class="field">
+      <%= label_tag "Find By Code" %>
+      <%= text_field_tag :code %>
+      <%= submit_tag  Spree.t(:search) %>
+    </div>
+
+  </div>
+<% end %>
+
 <table class="index">
   <thead>
     <tr>
       <th><%= Spree.t(:code) %></th>
+      <th>Valid?</th>
       <th><%= Spree.t(:original_value) %></th>
       <th><%= Spree.t(:current_value) %></th>
       <th><%= Spree.t(:email) %></th>
@@ -24,6 +36,7 @@
     <% @gift_cards.each do |card| %>
       <tr id="<%= spree_dom_id card %>">
         <td><%= card.code %></td>
+        <td><%= card.line_item.nil? || card.line_item.order.complete? %></td>
         <td><%= number_to_currency card.original_value %></td>
         <td><%= number_to_currency card.current_value %></td>
         <td><%= card.email %></td>

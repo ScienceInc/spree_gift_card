@@ -1,0 +1,44 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:gift_cards) %>
+<% end %>
+
+<%= form_tag(admin_gift_card_search_path, method: :get) do %>
+  <div class="alpha nine columns">
+    <div class="field">
+      <%= label_tag :code %>
+      <%= text_field_tag :code %>
+      <%= submit_tag  Spree.t(:search) %>
+    </div>
+
+  </div>
+<% end %>
+
+<table class="search">
+  <thead>
+    <tr>
+      <th><%= Spree.t(:code) %></th>
+      <th>Valid?</th>
+      <th><%= Spree.t(:original_value) %></th>
+      <th><%= Spree.t(:current_value) %></th>
+      <th><%= Spree.t(:email) %></th>
+      <th><%= Spree.t(:name) %></th>
+      <th>Original Order</th>
+      <th style="width:150px;"><%= Spree.t(:action) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id="<%= spree_dom_id @gift_card %>">
+      <td><%= @gift_card.code %></td>
+      <td><%= @gift_card.line_item.nil? || @gift_card.line_item.order.complete? %></td>
+      <td><%= number_to_currency @gift_card.original_value %></td>
+      <td><%= number_to_currency @gift_card.current_value %></td>
+      <td><%= @gift_card.email %></td>
+      <td><%= @gift_card.name %></td>
+      <td><%= @gift_card.line_item.present? ? link_to(@gift_card.line_item.order.number, edit_admin_order_path(@gift_card.line_item.order.number)) : "Admin Generated" %></td>
+      <td class="actions">
+        <%= link_to_edit @gift_card %> &nbsp;
+        <%= link_to_delete @gift_card %>
+      </td>
+    </tr>
+  </tbody>
+</table>
