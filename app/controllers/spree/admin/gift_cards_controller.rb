@@ -17,8 +17,24 @@ module Spree
         redirect_to admin_gift_cards_path
       end
 
-      def search
-        @gift_card = Spree::GiftCard.find_by_code(params[:code])
+      def search_by_code
+        gift_card = Spree::GiftCard.find_by_code(params[:code])
+        if gift_card
+          @gift_cards = [gift_card]
+        else
+          @gift_cards = []
+        end
+        render :search
+      end
+
+      def search_by_order
+        if order = Spree::Order.find_by_number(params[:order_number])
+          card_line_items = order.line_items.select{|li| li.product.is_gift_card?}
+          @gift_cards = card_line_items.collect{|c| c.gift_card}
+        else
+          @gift_cards = []
+        end
+        render :search
       end
 
       private

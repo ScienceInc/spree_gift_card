@@ -2,16 +2,29 @@
   <%= Spree.t(:gift_cards) %>
 <% end %>
 
-<%= form_tag(admin_gift_card_search_path, method: :get) do %>
-  <div class="alpha nine columns">
-    <div class="field">
-      <%= label_tag :code %>
-      <%= text_field_tag :code %>
-      <%= submit_tag  Spree.t(:search) %>
-    </div>
+<div class="alpha sixteen columns">
+  <%= form_tag(admin_gift_card_search_by_code_path, method: :get) do %>
+    <div class="alpha eight columns">
+      <div class="field">
+        <%= label_tag "Find By Code" %>
+        <%= text_field_tag :code %>
+        <%= submit_tag  Spree.t(:search) %>
+      </div>
 
-  </div>
-<% end %>
+    </div>
+  <% end %>
+
+  <%= form_tag(admin_gift_card_search_by_order_path, method: :get) do %>
+    <div class="omega eight columns">
+      <div class="field">
+        <%= label_tag "Find By Order Number" %>
+        <%= text_field_tag :order_number %>
+        <%= submit_tag  Spree.t(:search) %>
+      </div>
+
+    </div>
+  <% end %>
+</div>
 
 <table class="search">
   <thead>
@@ -27,18 +40,20 @@
     </tr>
   </thead>
   <tbody>
-    <tr id="<%= spree_dom_id @gift_card %>">
-      <td><%= @gift_card.code %></td>
-      <td><%= @gift_card.line_item.nil? || @gift_card.line_item.order.complete? %></td>
-      <td><%= number_to_currency @gift_card.original_value %></td>
-      <td><%= number_to_currency @gift_card.current_value %></td>
-      <td><%= @gift_card.email %></td>
-      <td><%= @gift_card.name %></td>
-      <td><%= @gift_card.line_item.present? ? link_to(@gift_card.line_item.order.number, edit_admin_order_path(@gift_card.line_item.order.number)) : "Admin Generated" %></td>
-      <td class="actions">
-        <%= link_to_edit @gift_card %> &nbsp;
-        <%= link_to_delete @gift_card %>
-      </td>
-    </tr>
+    <% @gift_cards.each do |gift_card| %>
+      <tr id="<%= spree_dom_id gift_card %>">
+        <td><%= gift_card.code %></td>
+        <td><%= gift_card.line_item.nil? || gift_card.line_item.order.complete? %></td>
+        <td><%= number_to_currency gift_card.original_value %></td>
+        <td><%= number_to_currency gift_card.current_value %></td>
+        <td><%= gift_card.email %></td>
+        <td><%= gift_card.name %></td>
+        <td><%= gift_card.line_item.present? ? link_to(gift_card.line_item.order.number, edit_admin_order_path(gift_card.line_item.order.number)) : "Admin Generated" %></td>
+        <td class="actions">
+          <%= link_to_edit gift_card %> &nbsp;
+          <%= link_to_delete gift_card %>
+        </td>
+      </tr>
+    <% end %>
   </tbody>
 </table>

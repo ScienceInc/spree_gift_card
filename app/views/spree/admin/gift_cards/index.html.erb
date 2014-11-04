@@ -8,16 +8,29 @@
   </li>
 <% end %>
 
-<%= form_tag(admin_gift_card_search_path, method: :get) do %>
-  <div class="alpha nine columns">
-    <div class="field">
-      <%= label_tag "Find By Code" %>
-      <%= text_field_tag :code %>
-      <%= submit_tag  Spree.t(:search) %>
-    </div>
+<div class="alpha sixteen columns">
+  <%= form_tag(admin_gift_card_search_by_code_path, method: :get) do %>
+    <div class="alpha eight columns">
+      <div class="field">
+        <%= label_tag "Find By Code" %>
+        <%= text_field_tag :code %>
+        <%= submit_tag  Spree.t(:search) %>
+      </div>
 
-  </div>
-<% end %>
+    </div>
+  <% end %>
+
+  <%= form_tag(admin_gift_card_search_by_order_path, method: :get) do %>
+    <div class="omega eight columns">
+      <div class="field">
+        <%= label_tag "Find By Order Number" %>
+        <%= text_field_tag :order_number %>
+        <%= submit_tag  Spree.t(:search) %>
+      </div>
+
+    </div>
+  <% end %>
+</div>
 
 <table class="index">
   <thead>
