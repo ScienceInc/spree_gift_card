@@ -34,7 +34,8 @@ module Spree
 
     def find_gift_card_variants
       gift_card_product_ids = Product.not_deleted.where(is_gift_card: true).pluck(:id)
-      @gift_card_variants = Variant.joins(:prices).where(["amount IN (?) AND product_id IN (?)", GiftCardConfig::AVAILABLE_AMOUNTS, gift_card_product_ids]).order("amount")
+      available_amounts = spree_current_user.try(:consultant?) ? GiftCardConfig::AVAILABLE_CONSULTANT_AMOUNTS : GiftCardConfig::AVAILABLE_AMOUNTS
+      @gift_card_variants = Variant.joins(:prices).where(["amount IN (?) AND product_id IN (?)", available_amounts, gift_card_product_ids]).order("amount")
     end
 
   end
