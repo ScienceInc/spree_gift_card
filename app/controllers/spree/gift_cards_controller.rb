@@ -2,6 +2,7 @@ module Spree
   class GiftCardsController < Spree::StoreController
 
   	def new
+      redirect_to root_path and return
   		find_gift_card_variants
   		@gift_card = Spree::GiftCard.new
   		@card_images = Spree::GiftCardImage.ordered
